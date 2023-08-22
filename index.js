@@ -15,9 +15,9 @@ let words_word;
 let words_correct;
 let helper;
 let lifes = 5;
-let getHelp = 0;
+let getHelp = false;
 
-function easy() {
+const easy = () => {
   words = [
     { word: "car", correct: "carro" },
     { word: "house", correct: "casa" },
@@ -36,11 +36,11 @@ function easy() {
   buttonEasy.style.backgroundColor = "rgb(224, 223, 220)";
   buttonMedium.removeAttribute("style");
   buttonHard.removeAttribute("style");
-  NewGame();
+  newGame();
   resetLife();
-  loadpage();
+  loadPage();
 }
-function medium() {
+const medium = () => {
   words = [
     { word: "dinner", correct: "janta" || "jantar" },
     { word: "lunch", correct: "almoço" },
@@ -71,11 +71,11 @@ function medium() {
   buttonMedium.style.backgroundColor = "rgb(224, 223, 220)";
   buttonEasy.removeAttribute("style");
   buttonHard.removeAttribute("style");
-  NewGame();
+  newGame();
   resetLife();
-  loadpage();
+  loadPage();
 }
-function hard() {
+const hard = () => {
   words = [
     { word: "squirrel", correct: "esquilo" },
     { word: "race", correct: "raça" || "corrida" },
@@ -121,26 +121,25 @@ function hard() {
   buttonHard.style.backgroundColor = "rgb(224, 223, 220)";
   buttonEasy.removeAttribute("style");
   buttonMedium.removeAttribute("style");
-  NewGame();
+  newGame();
   resetLife();
-  loadpage();
+  loadPage();
 }
 
-function loadpage() {
-  randomnum = rand();
-  if (wordcount.length == words.length) {
+const loadPage = () => {
+  randomnum = randomWord();
+  if (wordcount.length === words.length) {
     return finish();
   }
   if (wordcount.includes(randomnum) && wordcount.length <= 24) {
-    while (wordcount.includes(randomnum)) randomnum = rand();
+    while (wordcount.includes(randomnum)) randomnum = randomWord();
   }
   word.removeAttribute("style");
   words_word = words[randomnum].word.toUpperCase();
   words_correct = words[randomnum].correct;
   word.innerHTML = words_word;
   life.innerHTML = lifes;
-  console.log(wordcount);
-  getHelp = 0;
+  getHelp = false;
   helperAnswer.innerHTML = "Help!";
 }
 
@@ -149,34 +148,38 @@ word_answer.addEventListener("keypress", function (event) {
     button();
   }
 });
-function button() {
+
+const button = () => {
   const answer = document.querySelector("#word_answer").value.toLowerCase();
   const correct = words[randomnum].correct;
 
   if (answer.match(correct)) {
     wordcount.push(randomnum);
     correctWrong(answer, correct);
-    setTimeout(loadpage, 1200);
-    clearbox();
+    setTimeout(loadPage, 1200);
+    clearBox();
   } else {
     correctWrong(answer, correct);
     life.innerHTML = lifes;
     setTimeout(tryagain, 1200);
-    clearbox();
+    clearBox();
   }
 }
 
-function help() {
+const help = () => {
+
+  let isRepeated = randomLetter1 === randomLetter2
+
   helperAnswer.innerHTML = "";
-  if (getHelp === 1) {
+  if (getHelp) {
     alert("Você já obteve a ajuda!");
     helperAnswer.innerHTML = helper;
   } else {
-    randomLetter1 = words_correct[randC()];
-    randomLetter2 = words_correct[randC()];
-    if (randomLetter1 === randomLetter2) {
-      while (randomLetter1 === randomLetter2) {
-        randomLetter2 = words_correct[randC()];
+    randomLetter1 = words_correct[randomHelperLetter()];
+    randomLetter2 = words_correct[randomHelperLetter()];
+    if (isRepeated) {
+      while (isRepeated) {
+        randomLetter2 = words_correct[randomHelperLetter()];
       }
     }
     randomIndex1 = words_correct.indexOf(randomLetter1);
@@ -191,9 +194,7 @@ function help() {
       }
     }
     helper = helperAnswer.innerHTML;
-    console.log(randomIndex1);
-    console.log(randomIndex2);
-    getHelp += 1;
+    getHelp = true;
   }
 }
 
@@ -208,7 +209,7 @@ function correctWrong(answer, correct) {
     word.innerHTML = "Game Over!".toUpperCase();
     lifes = 5;
     wordcount = [];
-    setTimeout(loadpage, 1200);
+    setTimeout(loadPage, 1200);
   } else {
     word.style.color = red;
     word.innerHTML = "Try Again!".toUpperCase();
@@ -216,7 +217,7 @@ function correctWrong(answer, correct) {
   }
 }
 
-function clearbox() {
+function clearBox() {
   document.getElementById("word_answer").value = "";
 }
 
@@ -227,10 +228,10 @@ function tryagain() {
   word.removeAttribute("style");
 }
 
-function rand() {
+function randomWord() {
   return Math.floor(Math.random() * words.length);
 }
-function randC() {
+function randomHelperLetter() {
   return Math.floor(Math.random() * words[randomnum].correct.length);
 }
 
@@ -246,7 +247,7 @@ const resetLife = () => {
     lifes = 5;
   }
 };
-const NewGame = () => {
+const newGame = () => {
   word_answer.style.visibility = "visible";
   button_html.style.visibility = "visible";
   life_html.style.visibility = "visible";
