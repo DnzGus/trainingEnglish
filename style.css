@@ -25,8 +25,9 @@ body {
 }
 .helprow {
   display: flex;
-  justify-content: space-between;
-  width: 85px;
+  justify-content: center;
+  flex-direction: row;
+  width: 80vw;
   grid-row: 3;
   grid-column: 4/9;
 }
@@ -150,6 +151,8 @@ a:visited {
     font-weight: bold;
   }
   .help {
+    display: flex;
+    flex-direction: row;
     color: rgb(28, 29, 29);
     background-color: transparent;
     border: none;

@@ -17,6 +17,7 @@ let helper;
 let lifes = 5;
 let getHelp = false;
 
+
 const easy = () => {
   words = [
     { word: "car", correct: "carro" },
@@ -38,6 +39,7 @@ const easy = () => {
   buttonHard.removeAttribute("style");
   newGame();
   resetLife();
+  resetWords();
   loadPage();
 }
 const medium = () => {
@@ -73,6 +75,7 @@ const medium = () => {
   buttonHard.removeAttribute("style");
   newGame();
   resetLife();
+  resetWords();
   loadPage();
 }
 const hard = () => {
@@ -123,9 +126,9 @@ const hard = () => {
   buttonMedium.removeAttribute("style");
   newGame();
   resetLife();
+  resetWords();
   loadPage();
 }
-
 const loadPage = () => {
   randomnum = randomWord();
   if (wordcount.length === words.length) {
@@ -142,17 +145,14 @@ const loadPage = () => {
   getHelp = false;
   helperAnswer.innerHTML = "Help!";
 }
-
 word_answer.addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
     button();
   }
 });
-
 const button = () => {
   const answer = document.querySelector("#word_answer").value.toLowerCase();
   const correct = words[randomnum].correct;
-
   if (answer.match(correct)) {
     wordcount.push(randomnum);
     correctWrong(answer, correct);
@@ -165,11 +165,10 @@ const button = () => {
     clearBox();
   }
 }
-
 const help = () => {
-
+  let randomLetter1 = "0"
+  let randomLetter2 = "1"
   let isRepeated = randomLetter1 === randomLetter2
-
   helperAnswer.innerHTML = "";
   if (getHelp) {
     alert("Você já obteve a ajuda!");
@@ -197,7 +196,6 @@ const help = () => {
     getHelp = true;
   }
 }
-
 function correctWrong(answer, correct) {
   const green = "#007168";
   const red = "#cc0000";
@@ -216,25 +214,21 @@ function correctWrong(answer, correct) {
     lifes -= 1;
   }
 }
-
 function clearBox() {
   document.getElementById("word_answer").value = "";
 }
-
 function tryagain() {
   words_word = words[randomnum].word.toUpperCase();
   word.innerHTML = words_word;
   life.innerHTML = lifes;
   word.removeAttribute("style");
 }
-
 function randomWord() {
   return Math.floor(Math.random() * words.length);
 }
 function randomHelperLetter() {
   return Math.floor(Math.random() * words[randomnum].correct.length);
 }
-
 function finish() {
   word.innerHTML = `Parabéns, você concluiu todas as frases!`;
   word.removeAttribute(`style`);
@@ -252,3 +246,6 @@ const newGame = () => {
   button_html.style.visibility = "visible";
   life_html.style.visibility = "visible";
 };
+const resetWords = () => {
+  wordcount = [];
+}
